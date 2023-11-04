@@ -1,0 +1,131 @@
+리액트의 동작 원리
+리액트는 SPA을 만들 수 있는 라이브러리 
+
+SPA(Single Page Application)
+  페이지가 하나인 어플리케이션 --> html 파일이 하나
+
+비어있는 div(id가 root) 태그 하나만 존재하는 html 파일(index.html)
+(public 폴더 안에 위치 해 있음)
+리액트는 이 비어있는 html 의 div 태그 속에다가 
+그때 그 때 화면에 맞는 그림(컴포넌트 / UI)를 그때 그때 
+지우고 다시 그려준다(rendering)
+
+컴포넌트
+  리액트 UI의 구성요소를 얘기하는 단위,
+  하나의 페이지를 담당하는 전체 컴포넌트를 
+  페이지 컴포넌트라고 이야기 한다
+  (h1태그 도 컴포넌트)
+
+구현원리
+  Virtual DOM(가상 DOM) 을 활용해 구현을 해 놓았다
+
+전통적인 방식
+  html 파일의 태그(요소)들은 DOM으로 관리를 했다
+  (객체로 관리)
+
+리액트는 public  폴더 안에 있는 index.html을 
+그대로 복사하여 똑같은 가상의 DOM 구조를 만들고,
+그 가상의 DOM 구조에다가 h1태그(컴포넌트) 추가하면 
+실제 index.html의 DOM 구조에도 실제 h1태그가 추가가 됨
+
+--> src 폴더 안의 index.js
+index.js 는 
+index.html에서 id가 root 인 div태그를 가져와서
+  document.querySelector('#root')
+
+그것을 기반으로 가상의 DOM을 만들고, root 라는 이름으로 부를래
+  const root = ReactDOM.createRoot(document.querySelector('#root'))
+
+가상의 DOM(root) 속에다가 h1태그를 추가하면 실제 html에도 h1태그가
+  root.render(<h1>안녕</h1>)
+
+추가가 된다(rendering)
+  --> 가상DOM이 바뀌었으니 실제 index.html도 똑같은 모양으로 바뀌고
+  그 화면이 브라우저를 통해 나타난다
+
+중요한 것은 가상의 DOM을 그릴 때 원칙은 컴포넌트 한 개만 그릴 수 있다 
+따라서 여러개의 컴포넌트를 그리고 싶다면 하나의 컴포넌트(div 태그..)로
+감싸서 그려야 한다
+
+이때 의미없는 태그의 낭비를 막기 위해서 
+  <></>
+이름없는 태그(fragment)가 도입이 되었으며 , 이름없는 태그는 
+실제 html에 rendering 될 때 없는 것으로 rendering 된다
+
+.js 파일 안에 왜 html 태그가 있을까?
+
+자바스크립트 속에 <> 가 있으면 
+jsx 문법이라고 한다
+
+JavaScript Xml
+  자바스크립트 문법으로 만든 xml 
+
+따라서 .js 파일 안에 <> 가 있다면 jsx를 의미한다 
+  과거에는 .jsx 와 .js 를 구분 해야 했지만 지금은 안해도 된다
+  .js 에서 사용한 <h1>은 실제 html에서도 h1 태그로 변경이 되게 
+  같은 이름으로 짝지어져 있으나 속성 이름 등 세부적인 내용이 조금씩
+  차이가 있을 수는 있다
+
+
+<> 문법 언어 --> 
+  html
+    hyper text markup language
+    <>가 정해져있다
+  xml
+    학생 --> 나이는 10 이름은 배상엽 주소는 서울시
+    학생 --> 나이는 100 이름은 남궁민지 주소는 부산광역시
+    <></>
+    <student age=10 name='배상엽' address='서울시'>
+    <student age=100 name='남궁민지' address='부산광역시'>
+
+10배상엽서울시
+100남궁민지부산광역시
+
+css 파일을 적용시키기
+  .css 파일을 만든다 
+  만든 .css 파일을 적용시키고 싶은 곳에다 import 한다
+  import 된 css 파일은 index.html의 style 태그 속에 들어가게 된다
+
+리액트에서 컴포넌트 만들기 
+  같은 파일 안에서 만들어도 되고, 
+  다른 파일에다 만들어도 된다(알려주는 작업이 추가로 필요)
+  컴포넌트는 함수이다 
+  대신 대문자로 시작해야 한다 
+
+  내가 만든 컴포넌트를 사용하려면 실질적으로는 함수를 실행 시키는 것이고
+  jsx(태그들) 속에서 javascript 문법으로 동작하게 하고 싶으면 
+  {} 안쪽에 자바스크립트 코드를 써야 한다 
+  {컴포넌트()}
+
+--> <컴포넌트></컴포넌트> --> 컴포넌트() 가 실행되게 해놓았다
+
+// 컴포넌트 의 사이 내용은 props의 children에 들어간다 
+컴포넌트 사이 내용이 필요 없다면
+<컴포넌트 />
+
+
+react --> html 파일1개 실질적으로 그려지는것은 js 로 하네?
+          css 도 자바스크립트로 그리면, 설정하면 ?
+
+css in js (자바스크립트로 css 만들기)
+  라이브러리 설치 
+    emotion 
+      npm i 라이브러리이름 라이브러리이름 
+
+    styled-component
+
+자바스크립트 함수 
+const abc = (bbb)=>{
+
+}
+
+abc`font-size:10px`;
+
+abc( 'font-size:10px' );
+
+styled.p`
+  color:red;
+  font-size:20px;
+`;
+
+styled.p( 'color:red; font-size:20px;' );
